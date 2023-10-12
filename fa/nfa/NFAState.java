@@ -6,11 +6,6 @@ import fa.State;
 public class NFAState extends State {
 	private HashMap<Character,NFAState> transitionList;
 
-    public NFAState() {
-		//super(name);
-		
-	}
-	
 	/**
 	 * All concrete constructors must
 	 * invoke this one as super(name).
@@ -18,7 +13,7 @@ public class NFAState extends State {
 	 * correctly set.
 	 */
 	public NFAState(String name) {
-		this.name = name;
+		super(name);
         transitionList = new HashMap<Character,NFAState>();
 	}
 	
@@ -27,7 +22,7 @@ public class NFAState extends State {
 	 * @return returns the state label.
 	 */
 	public String getName(){
-		return "";
+		return"";
 	}
 
 	/**
@@ -52,7 +47,7 @@ public class NFAState extends State {
     }
 
     /**
-     * Returns the TransitionList for the associated DFAState.
+     * Returns the TransitionList for the associated NFAState.
      * @return - HashMap<Character, DFAState> transitionList
      */
     public HashMap<Character,NFAState> getTransitionList() {

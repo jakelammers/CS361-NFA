@@ -13,6 +13,9 @@ public class NFA implements NFAInterface {
     private NFAState startState;
     private Set<Character> alphabet;
 
+    /**
+     *Constructs an empty DFA object that is ready to be built.
+     */
     public NFA() {
         startState = null;
         states = new LinkedHashSet<>();
@@ -20,17 +23,27 @@ public class NFA implements NFAInterface {
         alphabet = new LinkedHashSet<>();
     }
 
-    @Override
+    /**
+	 * Adds a a state to the FA instance
+	 * @param name is the label of the state 
+	 * @return true if a new state created successfully and false if there is already state with such name
+	 */
     public boolean addState(String name) {
-        if(states.contains(getState(name))) {
-            return false;
+        for(NFAState state: states) {
+            if(state.getName().equals(name)) {
+                return false;
+            }
         }
         NFAState newState = new NFAState(name);
         states.add(newState);
         return true;
     }
 
-    @Override
+    /**
+	 * Marks an existing state as an accepting state
+	 * @param name is the label of the state
+	 * @return true if successful and false if no state with such name exists
+	 */
     public boolean setFinal(String name) {
         for(NFAState c: states) {
             if(c.getName().equals(name)) {
@@ -41,21 +54,35 @@ public class NFA implements NFAInterface {
         return true;
     }
 
-    @Override
+    /**
+	 * Adds the initial state to the FA instance
+	 * @param name is the label of the start state
+	 * @return true if successful and false if no state with such name exists
+	 */
     public boolean setStart(String name) {
-        if(states.contains(getState(name))) {
-            startState = (NFAState) getState(name);
-            return true;
+        for(NFAState state: states) {
+            if(state.getName().equals(name)) {
+                startState = state;
+                return true;
+            }
         }
         return false;
     }
 
-    @Override
+    /**
+	 * Adds a symbol to Sigma
+	 * @param symbol to add to the alphabet set
+	 */
     public void addSigma(char symbol) {
         alphabet.add(symbol);
     }
 
-    @Override
+    /**
+	 * Simulates a FA on input s to determine
+	 * whether the FA accepts s.
+	 * @param s - the input string
+	 * @return true if s in the language of the FA and false otherwise
+	 */
     public boolean accepts(String s) {
         NFAState currentState = startState;
         for(int i=0; i<s.length(); i++) {
@@ -67,13 +94,20 @@ public class NFA implements NFAInterface {
         return false;
     }
 
-    @Override
+    /**
+	 * Getter for Sigma
+	 * @return the alphabet of FA
+	 */
     public Set<Character> getSigma() {
         return alphabet;
     }
 
-    @Override
-    public State getState(String name) {
+    /**
+	 * Returns state with the given name, or null if none exists
+	 * @param name of a state
+	 * @return state object or null
+	 */
+    public Set<String> getState(String name) {
         for(NFAState checking: states) {
             if(Objects.equals(checking.getName(), name)) {
                 return checking;
@@ -82,7 +116,11 @@ public class NFA implements NFAInterface {
         return null;
     }
 
-    @Override
+    /**
+	 * Determines if a state with a given name is final
+	 * @param name the name of the state
+	 * @return true if a state with that name exists and it is final
+	 */
     public boolean isFinal(String name) {
         for(NFAState c: finalStates) {
             if(c.getName().equals(name)) {
@@ -92,36 +130,63 @@ public class NFA implements NFAInterface {
         return false;
     }
 
-    @Override
+    /**
+	 * Determines if a state with name is final
+	 * @param name the name of the state
+	 * @return true if a state with that name exists and it is the start state
+	 */
     public boolean isStart(String name) {
         return startState.getName().equals(name);
     }
 
-    @Override
+    /**
+	 * Return delta entries
+	 * @param from - the source state
+	 * @param onSymb - the label of the transition
+	 * @return a set of sink states
+	 */
     public Set<NFAState> getToState(NFAState from, char onSymb) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getToState'");
+        temp = from.getTransitionList();
+        for (char symb: temp.keySet()) {
+            newDFA.addTransition(c.getName(), temp.get(symb).getName(), symb);
+        }
     }
 
-    //FIXME
-    @Override
+    
+    /**
+	 * Traverses all epsilon transitions and determine
+	 * what states can be reached from s through e
+	 * @param s
+	 * @return set of states that can be reached from s on epsilon trans.
+	 */
     public Set<NFAState> eClosure(NFAState s) {
-        // TODO Auto-generated method stub
+        //FIXME
         throw new UnsupportedOperationException("Unimplemented method 'eClosure'");
     }
 
-    //FIXME
-    @Override
+    
+    /**
+	 * Determines the maximum number of NFA copies
+	 * created when processing string s
+	 * @param s - the input string
+	 * @return - the maximum number of NFA copies created.
+	 */
     public int maxCopies(String s) {
-        // TODO Auto-generated method stub
+        //FIXME
         throw new UnsupportedOperationException("Unimplemented method 'maxCopies'");
     }
 
-    @Override
+    /**
+	 * Adds the transition to the NFA's delta data structure
+	 * @param fromState is the label of the state where the transition starts
+	 * @param toState is the set of labels of the states where the transition ends
+	 * @param onSymb is the symbol from the NFA's alphabet.
+	 * @return true if successful and false if one of the states don't exist or the symbol in not in the alphabet
+	 */
     public boolean addTransition(String fromState, Set<String> toStates, char onSymb) {
         if(!alphabet.contains(onSymb)) {return false;}
         if(!states.contains(getState(fromState))) {return false;}
-        if(!states.contains(getState(toState))) {return false;}
+        if(!states.contains(getState(toStates))) {return false;}
         for (NFAState state : states) {
             if(state.getName().equals(fromState)) {
                 state.addToState(onSymb, (NFAState) getState(toState));
@@ -131,10 +196,13 @@ public class NFA implements NFAInterface {
         return false;
     }
 
-    //FIXME
-    @Override
+    
+    /**
+	 * Determines if NFA is an instance of a DFA
+	 * @return - true if NFA's transition function has DFA's properties.
+	 */
     public boolean isDFA() {
-        // TODO Auto-generated method stub
+        //FIXME
         throw new UnsupportedOperationException("Unimplemented method 'isDFA'");
     }
 
