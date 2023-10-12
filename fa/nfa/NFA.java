@@ -1,5 +1,6 @@
 package fa.nfa;
 
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -146,10 +147,14 @@ public class NFA implements NFAInterface {
 	 * @return a set of sink states
 	 */
     public Set<NFAState> getToState(NFAState from, char onSymb) {
-        temp = from.getTransitionList();
+        HashMap<Character, NFAState> temp = from.getTransitionList();
+        Set<NFAState> rSet = new LinkedHashSet<>();
         for (char symb: temp.keySet()) {
-            newDFA.addTransition(c.getName(), temp.get(symb).getName(), symb);
+            if(symb == onSymb) {
+                rSet.add(temp.get(onSymb));
+            }
         }
+        return rSet;
     }
 
     
