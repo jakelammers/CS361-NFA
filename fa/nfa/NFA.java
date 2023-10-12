@@ -107,10 +107,10 @@ public class NFA implements NFAInterface {
 	 * @param name of a state
 	 * @return state object or null
 	 */
-    public Set<String> getState(String name) {
-        for(NFAState checking: states) {
-            if(Objects.equals(checking.getName(), name)) {
-                return checking;
+    public State getState(String name) {
+        for(NFAState state: states) {
+            if(state.getName().equals(name)) {
+                return state;
             }
         }
         return null;
