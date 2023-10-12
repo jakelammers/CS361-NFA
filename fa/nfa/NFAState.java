@@ -22,7 +22,7 @@ public class NFAState extends State {
 	 * @return returns the state label.
 	 */
 	public String getName(){
-		return"";
+		return super.getName();
 	}
 
 	/**
@@ -56,7 +56,7 @@ public class NFAState extends State {
 	
 	@Override
 	public String toString(){
-		return "";
+		return super.toString();
 	}
     
 }
