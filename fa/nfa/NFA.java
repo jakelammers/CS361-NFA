@@ -22,6 +22,7 @@ public class NFA implements NFAInterface {
         states = new LinkedHashSet<>();
         finalStates = new LinkedHashSet<>();
         alphabet = new LinkedHashSet<>();
+        alphabet.add('e');
     }
 
     /**
@@ -52,7 +53,7 @@ public class NFA implements NFAInterface {
                 return true;
             }
         }
-        return true;
+        return false;
     }
 
     /**
@@ -61,11 +62,9 @@ public class NFA implements NFAInterface {
 	 * @return true if successful and false if no state with such name exists
 	 */
     public boolean setStart(String name) {
-        for(NFAState state: states) {
-            if(state.getName().equals(name)) {
-                startState = state;
-                return true;
-            }
+        if(states.contains(getState(name))) {
+            startState = (NFAState) getState(name);
+            return true;
         }
         return false;
     }
