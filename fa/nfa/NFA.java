@@ -191,11 +191,17 @@ public class NFA implements NFAInterface {
     public boolean addTransition(String fromState, Set<String> toStates, char onSymb) {
         if(!alphabet.contains(onSymb)) {return false;}
         if(!states.contains(getState(fromState))) {return false;}
-        if(!states.contains(getState(toStates))) {return false;}
+        for(String stateName: toStates) {
+            if(!states.contains(getState(stateName))) {
+                return false;
+            }
+        }
         for (NFAState state : states) {
-            if(state.getName().equals(fromState)) {
-                state.addToState(onSymb, (NFAState) getState(toState));
-                return true;
+            for(String toStateName : toStates) {
+                if(state.getName().equals(fromState)) {
+                    state.addToState(onSymb,(NFAState)getState(toStateName));
+                    return true;
+                }
             }
         }
         return false;
