@@ -22,7 +22,6 @@ public class NFA implements NFAInterface {
         states = new LinkedHashSet<>();
         finalStates = new LinkedHashSet<>();
         alphabet = new LinkedHashSet<>();
-        alphabet.add('e');
     }
 
     /**
@@ -188,6 +187,7 @@ public class NFA implements NFAInterface {
 	 * @return true if successful and false if one of the states don't exist or the symbol in not in the alphabet
 	 */
     public boolean addTransition(String fromState, Set<String> toStates, char onSymb) {
+        if(onSymb == 'e' || !alphabet.contains(onSymb)) {alphabet.add('e');}
         if(!alphabet.contains(onSymb)) {return false;}
         if(!states.contains(getState(fromState))) {return false;}
         for(String stateName: toStates) {
@@ -212,8 +212,24 @@ public class NFA implements NFAInterface {
 	 * @return - true if NFA's transition function has DFA's properties.
 	 */
     public boolean isDFA() {
-        //FIXME
-        throw new UnsupportedOperationException("Unimplemented method 'isDFA'");
+        for(NFAState state: states) {
+            HashMap<Character, NFAState> temp = state.getTransitionList();
+            for (char symb: temp.keySet()) {
+                int flag = 0;
+                if(temp.containsKey(symb)) {
+                    flag +=1;
+                } else {
+                    flag = 1;
+                } 
+                if(symb == 'e') {
+                    return false;
+                }
+                if(flag >=2) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     /**
