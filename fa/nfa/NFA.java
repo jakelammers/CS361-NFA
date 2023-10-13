@@ -2,8 +2,8 @@ package fa.nfa;
 
 import java.util.HashMap;
 import java.util.LinkedHashSet;
-import java.util.Objects;
 import java.util.Set;
+import java.util.Stack;
 
 import fa.State;
 
@@ -83,13 +83,14 @@ public class NFA implements NFAInterface {
 	 * @return true if s in the language of the FA and false otherwise
 	 */
     public boolean accepts(String s) {
-        NFAState currentState = startState;
-        for(int i=0; i<s.length(); i++) {
-            currentState = currentState.getToState(s.charAt(i));
-        }
-        if(finalStates.contains(currentState)) {
-            return true;
-        }
+        //FIXME
+        // NFAState currentState = startState;
+        // for(int i=0; i<s.length(); i++) {
+        //     currentState = currentState.getToState(s.charAt(i));
+        // }
+        // if(finalStates.contains(currentState)) {
+        //     return true;
+        // }
         return false;
     }
 
@@ -159,15 +160,44 @@ public class NFA implements NFAInterface {
     /**
 	 * Traverses all epsilon transitions and determine
 	 * what states can be reached from s through e
-	 * @param s
+	 * @param state - NFA state to search for epsilon transitions
 	 * @return set of states that can be reached from s on epsilon trans.
 	 */
-    public Set<NFAState> eClosure(NFAState s) {
-        //FIXME
-        throw new UnsupportedOperationException("Unimplemented method 'eClosure'");
+    public Set<NFAState> eClosure(NFAState state) {
+        Set<NFAState> eClosureSet = new LinkedHashSet<>();
+        Set<NFAState> eTransitions = new LinkedHashSet<>();
+        Stack<NFAState> stack = new Stack<>();
+
+        // Initialize the stack with the initial state 's'
+        stack.push(state);
+
+        // Perform DFS to find epsilon closures
+        while (!stack.isEmpty()) {
+            NFAState currentState = stack.pop();
+
+            // Add the current state to the epsilon closure set
+            eClosureSet.add(currentState);
+
+            // Get the epsilon transitions of the current state
+            HashMap<Character,NFAState> tl = currentState.getTransitionList();
+            for(char c: tl.keySet()) {
+                if(c == 'e') {
+                    eTransitions = getToState(currentState, 'e');
+                }
+            }
+
+            for (NFAState nextState : eTransitions) {
+                // Check if the next state is not already in the epsilon closure set
+                if (!eClosureSet.contains(nextState)) {
+                    // Push the next state onto the stack for further exploration
+                    stack.push(nextState);
+                }
+            }
+        }
+
+        return eClosureSet;
     }
 
-    
     /**
 	 * Determines the maximum number of NFA copies
 	 * created when processing string s
