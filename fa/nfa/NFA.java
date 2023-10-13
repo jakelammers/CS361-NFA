@@ -3,7 +3,9 @@ package fa.nfa;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 import java.util.Set;
 import java.util.Stack;
 
@@ -229,9 +231,35 @@ public class NFA implements NFAInterface {
 	 * @param s - the input string
 	 * @return - the maximum number of NFA copies created.
 	 */
-    public int maxCopies(String s) {
-        //FIXME
-        throw new UnsupportedOperationException("Unimplemented method 'maxCopies'");
+    public int maxCopies(String input) {
+        Queue<Set<NFAState>> stateQueue = new LinkedList<>();
+        Set<NFAState> currentStates = eClosure(startState);
+        stateQueue.offer(currentStates);
+        int maxCopies = 1; // At least one copy starts in the start state
+
+        // Perform BFS to explore the state space
+        while (!stateQueue.isEmpty() && !input.isEmpty()) {
+            char symbol = input.charAt(0);
+            input = input.substring(1);
+
+            currentStates = stateQueue.poll();
+
+            Set<NFAState> nextStates = new LinkedHashSet<>();
+
+            for (NFAState currentState : currentStates) {
+                Set<NFAState> symbolTransitions = getToState(currentState, symbol);
+                if (symbolTransitions != null) {
+                    for (NFAState state: symbolTransitions) {
+                    nextStates.addAll(eClosure(state));
+                    }
+                }
+            }
+
+            stateQueue.offer(nextStates);
+            maxCopies = Math.max(maxCopies, nextStates.size());
+        }
+
+        return maxCopies;
     }
 
     /**
