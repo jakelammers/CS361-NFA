@@ -1,7 +1,9 @@
 package fa.nfa;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.Stack;
 
@@ -82,17 +84,40 @@ public class NFA implements NFAInterface {
 	 * @param s - the input string
 	 * @return true if s in the language of the FA and false otherwise
 	 */
-    public boolean accepts(String s) {
-        //FIXME
-        // NFAState currentState = startState;
-        // for(int i=0; i<s.length(); i++) {
-        //     currentState = currentState.getToState(s.charAt(i));
-        // }
-        // if(finalStates.contains(currentState)) {
-        //     return true;
-        // }
-        return false;
-    }
+    public boolean accepts(String input) {
+        Set<NFAState> currentStates = eClosure(startState);
+        List<Set<NFAState>> stateHistory = new ArrayList<>(); // To track state configurations
+
+        // Loop through the input string
+        for (char symbol : input.toCharArray()) {
+            // Create a new set to store next states
+            Set<NFAState> nextStates = new LinkedHashSet<>();
+
+            // For each current state, find transitions for the symbol
+            for (NFAState currentState : currentStates) {
+                Set<NFAState> symbolTransitions = getToState(currentState, symbol);
+                if (symbolTransitions != null) {
+                    for (NFAState state: symbolTransitions) {
+                    nextStates.addAll(eClosure(state));
+                    }
+                }
+            }
+
+            // Add the current state configuration to history
+            stateHistory.add(currentStates);
+
+            // Update current states for the next symbol
+            currentStates = nextStates;
+        }
+
+        // Check if any of the copies are in an accepting state
+        for (NFAState state : currentStates) {
+            if (isFinal(state.getName())) {
+                return true; // Accepts the input
+            }
+        }
+        return false; // Rejects the input
+    }  
 
     /**
 	 * Getter for Sigma
