@@ -140,7 +140,7 @@ public class NFATest {
 	@Test
 	public void test2_1() {
 		NFA nfa = nfa2();
-		System.out.println("nfa1 instantiation done");
+		System.out.println("nfa2 instantiation done");
 	}
 	
 	@Test
@@ -156,14 +156,14 @@ public class NFATest {
 		assertTrue(nfa.isFinal("q3"));
 		assertFalse(nfa.isFinal("q6"));
 		
-		System.out.println("nfa1 correctness done");
+		System.out.println("nfa2 correctness done");
 	}
 	
 	@Test
 	public void test2_3() {
 		NFA nfa = nfa2();
 		assertFalse(nfa.isDFA());
-		System.out.println("nfa1 isDFA done");
+		System.out.println("nfa2 isDFA done");
 	}
 	
 	@Test
@@ -173,8 +173,7 @@ public class NFATest {
 		assertEquals(nfa.eClosure((NFAState)nfa.getState("q1")), Set.of(nfa.getState("q1"),nfa.getState("q2")));
 		assertEquals(nfa.eClosure((NFAState)nfa.getState("q3")), Set.of(nfa.getState("q3")));
 		assertEquals(nfa.eClosure((NFAState)nfa.getState("q4")), Set.of(nfa.getState("q4")));
-		
-		System.out.println("nfa1 eClosure done");
+		System.out.println("nfa2 eClosure done");
 	}
 	
 	@Test
@@ -185,7 +184,7 @@ public class NFATest {
 		assertFalse(nfa.accepts("0001100"));
 		assertTrue(nfa.accepts("010011"));
 		assertFalse(nfa.accepts("0101"));
-		System.out.println("nfa1 accepts done");
+		System.out.println("nfa2 accepts done");
 	}
 	
 	@Test
@@ -197,7 +196,7 @@ public class NFATest {
 		assertEquals(nfa.maxCopies("010011"), 4);
 		assertEquals(nfa.maxCopies("0101"), 3);
 		
-		System.out.println("nfa1 maxCopies done");
+		System.out.println("nfa2 maxCopies done");
 	}
 	
 	private NFA nfa3() {
@@ -241,7 +240,7 @@ public class NFATest {
 	@Test
 	public void test3_1() {
 		NFA nfa = nfa3();
-		System.out.println("nfa1 instantiation done");
+		System.out.println("nfa3 instantiation done");
 	}
 	
 	@Test
@@ -255,14 +254,14 @@ public class NFATest {
 		assertFalse(nfa.isStart("L"));
 		assertTrue(nfa.isFinal("N"));
 		assertFalse(nfa.isFinal("I"));
-		System.out.println("nfa1 correctness done");
+		System.out.println("nfa3 correctness done");
 	}
 	
 	@Test
 	public void test3_3() {
 		NFA nfa = nfa3();
 		assertFalse(nfa.isDFA());
-		System.out.println("nfa1 isDFA done");
+		System.out.println("nfa3 isDFA done");
 	}
 	
 	@Test
@@ -272,8 +271,7 @@ public class NFATest {
 		assertEquals(nfa.eClosure((NFAState)nfa.getState("N")), Set.of(nfa.getState("N")));
 		assertEquals(nfa.eClosure((NFAState)nfa.getState("L")), Set.of(nfa.getState("L"),nfa.getState("I")));
 		assertEquals(nfa.eClosure((NFAState)nfa.getState("I")), Set.of(nfa.getState("I")));
-		
-		System.out.println("nfa1 eClosure done");
+		System.out.println("nfa3 eClosure done");
 	}
 	
 	@Test
@@ -284,7 +282,7 @@ public class NFATest {
 		assertTrue(nfa.accepts("01#11##"));
 		assertFalse(nfa.accepts("#01000###"));
 		assertFalse(nfa.accepts("011#00010#"));
-		System.out.println("nfa1 accepts done");
+		System.out.println("nfa3 accepts done");
 	}
 	
 	@Test
@@ -295,7 +293,7 @@ public class NFATest {
 		assertEquals(nfa.maxCopies("011#00010#"), 3);
 		assertEquals(nfa.maxCopies("23"), 3);
 		assertEquals(nfa.maxCopies("011#00010#"), 3);
-		System.out.println("nfa1 maxCopies done");
+		System.out.println("nfa3 maxCopies done");
 	}
 
 }

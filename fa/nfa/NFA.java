@@ -191,9 +191,7 @@ public class NFA implements NFAInterface {
 	 * @return set of states that can be reached from s on epsilon trans.
 	 */
     public Set<NFAState> eClosure(NFAState state) {
-        Set<NFAState> eClosureSet = new LinkedHashSet<>();
-        Set<NFAState> visited = new LinkedHashSet<>();
-        HashMap<Character,NFAState> eTransitions = new HashMap<>();
+        Set<NFAState> eClosureSet = new LinkedHashSet<>();// Instead of this, use a HashSet.
         Stack<NFAState> stack = new Stack<>();
 
         // Initialize the stack with the initial state 's'
@@ -202,7 +200,6 @@ public class NFA implements NFAInterface {
         // Perform DFS to find epsilon closures
         while (!stack.isEmpty()) {
             NFAState currentState = stack.pop();
-            visited.add(currentState);
 
             // Add the current state to the epsilon closure set
             eClosureSet.add(currentState);
@@ -211,23 +208,16 @@ public class NFA implements NFAInterface {
             HashMap<Character,NFAState> tl = currentState.getTransitionList();
             for(char c: tl.keySet()) {
                 if(c == 'e') {
-                    eTransitions.put('e',tl.get(c));
-                }
-            }
-
-            for (char c: tl.keySet()) {
-                // Check if the next state is not already in the epsilon closure set
-                if (!eClosureSet.contains(tl.get(c))) {
-                    // Push the next state onto the stack for further exploration
-                    for(NFAState nfa: getToState(currentState, c)) {
-                    stack.push(nfa);
-
-                    }
+                    // Ad the state to the vector itself; don't do anything else.
+                    Set<NFAState> temp = getToState(currentState, c);
+                    // for(NFAState nfa: temp) {
+                    //     eClosureSet.add(nfa);
+                    // }
+                    eClosureSet.addAll(temp);
+                    for (NFAState nfa: temp) stack.push(nfa);
                 }
             }
         }
-        System.out.println("\nDFA TOSTRING\n" + toString());
-        System.out.println("\nECLOSURE\n" + eClosureSet);
         return eClosureSet;
     }
 
