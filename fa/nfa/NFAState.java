@@ -54,7 +54,10 @@ public class NFAState extends State {
         return this.transitionList;
 	}
 	
-	@Override
+	/**
+     * returns the name of the nfa state.
+     * @return String name
+    */
 	public String toString(){
 		return super.toString();
 	}

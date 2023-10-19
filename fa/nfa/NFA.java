@@ -192,7 +192,8 @@ public class NFA implements NFAInterface {
 	 */
     public Set<NFAState> eClosure(NFAState state) {
         Set<NFAState> eClosureSet = new LinkedHashSet<>();
-        Set<NFAState> eTransitions = new LinkedHashSet<>();
+        Set<NFAState> visited = new LinkedHashSet<>();
+        HashMap<Character,NFAState> eTransitions = new HashMap<>();
         Stack<NFAState> stack = new Stack<>();
 
         // Initialize the stack with the initial state 's'
@@ -201,6 +202,7 @@ public class NFA implements NFAInterface {
         // Perform DFS to find epsilon closures
         while (!stack.isEmpty()) {
             NFAState currentState = stack.pop();
+            visited.add(currentState);
 
             // Add the current state to the epsilon closure set
             eClosureSet.add(currentState);
@@ -209,19 +211,23 @@ public class NFA implements NFAInterface {
             HashMap<Character,NFAState> tl = currentState.getTransitionList();
             for(char c: tl.keySet()) {
                 if(c == 'e') {
-                    eTransitions = getToState(currentState, 'e');
+                    eTransitions.put('e',tl.get(c));
                 }
             }
 
-            for (NFAState nextState : eTransitions) {
+            for (char c: tl.keySet()) {
                 // Check if the next state is not already in the epsilon closure set
-                if (!eClosureSet.contains(nextState)) {
+                if (!eClosureSet.contains(tl.get(c))) {
                     // Push the next state onto the stack for further exploration
-                    stack.push(nextState);
+                    for(NFAState nfa: getToState(currentState, c)) {
+                    stack.push(nfa);
+
+                    }
                 }
             }
         }
-
+        System.out.println("\nDFA TOSTRING\n" + toString());
+        System.out.println("\nECLOSURE\n" + eClosureSet);
         return eClosureSet;
     }
 
