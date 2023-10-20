@@ -3,7 +3,6 @@ package fa.nfa;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.Set;
@@ -86,41 +85,49 @@ public class NFA implements NFAInterface {
 	 * @param s - the input string
 	 * @return true if s in the language of the FA and false otherwise
 	 */
+    
     public boolean accepts(String input) {
-        Set<NFAState> currentStates = eClosure(startState);
-        List<Set<NFAState>> stateHistory = new ArrayList<>(); // To track state configurations
-
+        NFAState current = startState;
+        List<NFAState> visited = new ArrayList<>(); // To track state configurations
+    
+        visited.add(current);
+    
         // Loop through the input string
         for (char symbol : input.toCharArray()) {
             // Create a new set to store next states
             Set<NFAState> nextStates = new LinkedHashSet<>();
-
+    
             // For each current state, find transitions for the symbol
-            for (NFAState currentState : currentStates) {
-                Set<NFAState> symbolTransitions = getToState(currentState, symbol);
-                if (symbolTransitions != null) {
-                    for (NFAState state: symbolTransitions) {
-                    nextStates.addAll(eClosure(state));
-                    }
-                }
+            for (NFAState state : visited) {
+                Set<NFAState> stateTransitions = getToState(state, symbol);
+                nextStates.addAll(stateTransitions);
             }
-
-            // Add the current state configuration to history
-            stateHistory.add(currentStates);
-
-            // Update current states for the next symbol
-            currentStates = nextStates;
-        }
-
-        // Check if any of the copies are in an accepting state
-        for (NFAState state : currentStates) {
-            if (isFinal(state.getName())) {
-                return true; // Accepts the input
+    
+            if (nextStates.isEmpty()) {
+                // If there are no transitions, the NFA rejects the input string
+                return false;
             }
-        }
-        return false; // Rejects the input
-    }  
+    
+            // Update the current state with the set of next states
+           for(NFAState state: nextStates){
 
+            current = state;
+           }
+           // current = nextStates.iterator().next();
+    
+            visited.addAll(nextStates);
+        }
+    
+        // After processing the entire input string, check for acceptance
+        NFAState finalState = visited.get(visited.size() - 1);
+    
+        if (isFinal(finalState.getName())) {
+            return true; // The NFA accepts the input string
+        }
+    
+        return false; // The NFA rejects the input string
+    }
+    
     /**
 	 * Getter for Sigma
 	 * @return the alphabet of FA
@@ -228,34 +235,8 @@ public class NFA implements NFAInterface {
 	 * @return - the maximum number of NFA copies created.
 	 */
     public int maxCopies(String input) {
-        Queue<Set<NFAState>> stateQueue = new LinkedList<>();
-        Set<NFAState> currentStates = eClosure(startState);
-        stateQueue.offer(currentStates);
-        int maxCopies = 1; // At least one copy starts in the start state
+        return 0;
 
-        // Perform BFS to explore the state space
-        while (!stateQueue.isEmpty() && !input.isEmpty()) {
-            char symbol = input.charAt(0);
-            input = input.substring(1);
-
-            currentStates = stateQueue.poll();
-
-            Set<NFAState> nextStates = new LinkedHashSet<>();
-
-            for (NFAState currentState : currentStates) {
-                Set<NFAState> symbolTransitions = getToState(currentState, symbol);
-                if (symbolTransitions != null) {
-                    for (NFAState state: symbolTransitions) {
-                    nextStates.addAll(eClosure(state));
-                    }
-                }
-            }
-
-            stateQueue.offer(nextStates);
-            maxCopies = Math.max(maxCopies, nextStates.size());
-        }
-
-        return maxCopies;
     }
 
     /**
