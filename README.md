@@ -15,8 +15,7 @@
 | |-- State.java
 | |-- nfa
 | |-- NFAInterface.java
-|-- test
-|-- nfa
+|-- test/nfa
 |-- NFATest.java
 ```
 ### Compiling and Using
