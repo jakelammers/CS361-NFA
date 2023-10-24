@@ -5,9 +5,10 @@
 * Semester: Fall 2023
 
 ## Overview
-
+This project involves building and managing nondeterministic finite automata (NFAs) using Java, focusing on a detailed representation of their behaviors, states, and transitions. It offers a structured method for simulating and analyzing NFAs within a defined framework.
 
 ## Reflection
+
 ### Contents
 ```bash
 |-- fa
@@ -19,9 +20,9 @@
 |-- NFATest.java
 ```
 ### Compiling and Using
-First navigate to the top-level of the directory that holds the project:
+Navigate to the top of the directory that holds the project:
 
-To compile Junit and NFATest on onyx use the following command:
+To compile Junit and NFATest on Onyx use the following command:
 
     javac -cp .:/usr/share/java/junit.jar ./test/nfa/NFATest.java
 
