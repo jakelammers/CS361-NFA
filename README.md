@@ -9,28 +9,14 @@
 
 ## Reflection
 ### Contents
-```bash
-├── Makefile
-├── README.md
-├── fa
-│   ├── FAInterface.java
-│   ├── State.java
-│   ├── dfa
-│   │   ├── DFA.java
-│   │   ├── DFAInterface.java
-│   │   └── DFAState.java
-│   └── nfa
-│       ├── NFA.java
-│       ├── NFADriver.java
-│       ├── NFAInterface.java
-│       └── NFAState.java
-├── p2.pdf
-└── tests
-    ├── p2tc0.txt
-    ├── p2tc1.txt
-    ├── p2tc2.txt
-    └── p2tc3.txt
-```
+|-- fa
+| |-- FAInterface.java
+| |-- State.java
+| |-- nfa
+| |-- NFAInterface.java
+|-- test
+|-- nfa
+|-- NFATest.java
 
 ### Compiling and Using
 First navigate to the top-level of the directory that holds the project:
