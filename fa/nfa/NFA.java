@@ -256,15 +256,53 @@ public class NFA implements NFAInterface {
     }
 
     /**
-     * Determines the maximum number of NFA copies
-     * created when processing string s
+     * Determines the maximum number of NFA "copies" (active states)
+     * created when processing string s due to nondeterminism.
      * 
      * @param s - the input string
      * @return - the maximum number of NFA copies created.
      */
-    public int maxCopies(String input) {
-        return 0;
+    public int maxCopies(String s) {
+        // Initialize the counter for the maximum copies.
+        int maxCopies = 1; // At least one "copy" will be there which is the NFA itself.
 
+        // Start with the initial state.
+        Set<NFAState> currentStates = new LinkedHashSet<>();
+        currentStates.add(startState);
+
+        // Iterating over the characters of the input string.
+        for (char symbol : s.toCharArray()) {
+
+            // Prepare a set for the states reached after this transition step.
+            Set<NFAState> nextStates = new LinkedHashSet<>();
+
+            // For each current state, find all the reachable states for the transition on
+            // the current symbol.
+            for (NFAState state : currentStates) {
+                Set<NFAState> transitions = getToState(state, symbol);
+                nextStates.addAll(transitions);
+
+                // For nondeterminism, we also consider 'e' transitions or epsilon transitions.
+                Set<NFAState> epsilonTransitions = eClosure(state);
+                nextStates.addAll(epsilonTransitions);
+            }
+
+            // If no next states, we break the loop as no further transitions are possible.
+            if (nextStates.isEmpty()) {
+                break;
+            }
+
+            // Update the currentStates with nextStates for the next iteration/symbol.
+            currentStates = nextStates;
+
+            // Update the maximum number of copies if the current active states exceed it.
+            if (currentStates.size() > maxCopies) {
+                maxCopies = currentStates.size();
+            }
+        }
+
+        // Return the counted maximum number of copies.
+        return maxCopies;
     }
 
     /**
