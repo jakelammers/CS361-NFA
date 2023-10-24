@@ -275,6 +275,7 @@ public class NFA implements NFAInterface {
         for (char symbol : s.toCharArray()) {
 
             // Prepare a set for the states reached after this transition step.
+
             Set<NFAState> nextStates = new LinkedHashSet<>();
 
             // For each current state, find all the reachable states for the transition on
