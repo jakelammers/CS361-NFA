@@ -9,6 +9,7 @@
 
 ## Reflection
 ### Contents
+```bash
 |-- fa
 | |-- FAInterface.java
 | |-- State.java
@@ -17,7 +18,7 @@
 |-- test
 |-- nfa
 |-- NFATest.java
-
+```
 ### Compiling and Using
 First navigate to the top-level of the directory that holds the project:
 
