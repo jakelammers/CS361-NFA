@@ -6,6 +6,7 @@
  * This program implements a nondeterministic finite automaton (NFA) 
  * with definitions for the automaton's structure and behaviors.
  */
+
 package fa.nfa;
 
 // Necessary imports for the functionality of the NFA class.
