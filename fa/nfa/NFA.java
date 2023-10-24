@@ -244,9 +244,6 @@ public class NFA implements NFAInterface {
                 if (c == 'e') {
                     // Ad the state to the vector itself; don't do anything else.
                     Set<NFAState> temp = getToState(currentState, c);
-                    // for(NFAState nfa: temp) {
-                    // eClosureSet.add(nfa);
-                    // }
                     eClosureSet.addAll(temp);
                     for (NFAState nfa : temp)
                         stack.push(nfa);
