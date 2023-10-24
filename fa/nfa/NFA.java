@@ -11,7 +11,9 @@ package fa.nfa;
 
 // Necessary imports for the functionality of the NFA class.
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Queue;
@@ -264,46 +266,44 @@ public class NFA implements NFAInterface {
      * @return - the maximum number of NFA copies created.
      */
     public int maxCopies(String s) {
-        // Initialize the counter for the maximum copies.
-        int maxCopies = 1; // At least one "copy" will be there which is the NFA itself.
+        // Begin with the initial state and its ε-closure.
+        Set<NFAState> currentStates = eClosure(startState);
 
-        // Start with the initial state.
-        Set<NFAState> currentStates = new LinkedHashSet<>();
-        currentStates.add(startState);
+        // Maximum copies begin as the size of the current states (after ε-closure).
+        int maxCopies = currentStates.size();
 
-        // Iterating over the characters of the input string.
+        // Process each character in the input string.
         for (char symbol : s.toCharArray()) {
+            Set<NFAState> nextStates = new HashSet<>();
 
-            // Prepare a set for the states reached after this transition step.
-
-            Set<NFAState> nextStates = new LinkedHashSet<>();
-
-            // For each current state, find all the reachable states for the transition on
-            // the current symbol.
+            // For every state, consider the transitions on 'symbol' and ε-transitions.
             for (NFAState state : currentStates) {
                 Set<NFAState> transitions = getToState(state, symbol);
-                nextStates.addAll(transitions);
-
-                // For nondeterminism, we also consider 'e' transitions or epsilon transitions.
-                Set<NFAState> epsilonTransitions = eClosure(state);
-                nextStates.addAll(epsilonTransitions);
+                for (NFAState reachedState : transitions) {
+                    nextStates.addAll(eClosure(reachedState)); // Add all states reachable by ε-transitions.
+                }
             }
 
-            // If no next states, we break the loop as no further transitions are possible.
+            // If no next states are reachable, processing can end.
             if (nextStates.isEmpty()) {
                 break;
             }
 
-            // Update the currentStates with nextStates for the next iteration/symbol.
+            // Set the current states for the next iteration and adjust maxCopies.
             currentStates = nextStates;
-
-            // Update the maximum number of copies if the current active states exceed it.
-            if (currentStates.size() > maxCopies) {
-                maxCopies = currentStates.size();
-            }
+            maxCopies = Math.max(maxCopies, currentStates.size());
         }
 
-        // Return the counted maximum number of copies.
+        // After processing the input, consider the ε-closures one last time.
+        Set<NFAState> finalStates = new HashSet<>();
+        for (NFAState state : currentStates) {
+            finalStates.addAll(eClosure(state));
+        }
+
+        // Update the maximum based on the states reachable after the final
+        // ε-transitions.
+        maxCopies = Math.max(maxCopies, finalStates.size());
+
         return maxCopies;
     }
 
