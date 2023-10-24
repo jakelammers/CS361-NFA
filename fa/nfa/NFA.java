@@ -1,5 +1,14 @@
+/**
+ * @author jake lammers
+ * @author munib ahmed
+ * 10/24/23
+ * 
+ * This program implements a nondeterministic finite automaton (NFA) 
+ * with definitions for the automaton's structure and behaviors.
+ */
 package fa.nfa;
 
+// Necessary imports for the functionality of the NFA class.
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -8,10 +17,15 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.Stack;
 
+// Importing the State class which is used in this file.
 import fa.State;
 
+// The NFA class implements the NFAInterface, indicating it uses methods specific to nondeterministic finite automata.
 public class NFA implements NFAInterface {
 
+
+// Class member variables representing the sets of states, final states, the start state, and the alphabet for the NFA.
+    private Set<NFAState> states;
     private Set<NFAState> states;
     private Set<NFAState> finalStates;
     private NFAState startState;
@@ -21,6 +35,8 @@ public class NFA implements NFAInterface {
      *Constructs an empty DFA object that is ready to be built.
      */
     public NFA() {
+	
+	// Initialization of the NFA components
         startState = null;
         states = new LinkedHashSet<>();
         finalStates = new LinkedHashSet<>();
