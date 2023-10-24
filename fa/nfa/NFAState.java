@@ -1,43 +1,46 @@
 package fa.nfa;
+
 import java.util.HashMap;
 
 import fa.State;
 
 public class NFAState extends State {
-	private HashMap<Character,NFAState> transitionList;
+    private HashMap<Character, NFAState> transitionList;
 
-	/**
-	 * All concrete constructors must
-	 * invoke this one as super(name).
-	 * This way name instance variable is 
-	 * correctly set.
-	 */
-	public NFAState(String name) {
-		super(name);
-        transitionList = new HashMap<Character,NFAState>();
-	}
-	
-	/**
-	 * getter for the string label
-	 * @return returns the state label.
-	 */
-	public String getName(){
-		return super.getName();
-	}
+    /**
+     * All concrete constructors must
+     * invoke this one as super(name).
+     * This way name instance variable is
+     * correctly set.
+     */
+    public NFAState(String name) {
+        super(name);
+        transitionList = new HashMap<Character, NFAState>();
+    }
 
-	/**
+    /**
+     * getter for the string label
+     * 
+     * @return returns the state label.
+     */
+    public String getName() {
+        return super.getName();
+    }
+
+    /**
      * Adds a transition to the DFAState's transition list.
      * 
-     * @param symb - Character to transition on
+     * @param symb  - Character to transition on
      * @param state - State to transition to
      */
     public void addToState(char symb, NFAState state) {
         transitionList.put(symb, state);
     }
-    
+
     /**
-     * Returns the toState in the HashMap associated with the imput transition character.
-     *  
+     * Returns the toState in the HashMap associated with the imput transition
+     * character.
+     * 
      * @param symb - Transition character
      * @return - The state that is paired to symb in the HashMap
      */
@@ -48,15 +51,16 @@ public class NFAState extends State {
 
     /**
      * Returns the TransitionList for the associated NFAState.
+     * 
      * @return - HashMap<Character, DFAState> transitionList
      */
-    public HashMap<Character,NFAState> getTransitionList() {
+    public HashMap<Character, NFAState> getTransitionList() {
         return this.transitionList;
-	}
-	
-	@Override
-	public String toString(){
-		return super.toString();
-	}
-    
+    }
+
+    @Override
+    public String toString() {
+        return super.toString();
+    }
+
 }
