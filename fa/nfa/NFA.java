@@ -110,46 +110,50 @@ public class NFA implements NFAInterface {
      * @return true if s in the language of the FA and false otherwise
      */
 
-    public boolean accepts(String input) {
-        NFAState current = startState;
-        List<NFAState> visited = new ArrayList<>(); // To track state configurations
+    public boolean accepts(String s) {
 
-        visited.add(current);
+        // If the input is specifically the "e" string, we interpret it as an epsilon
+        // (empty) string.
+        if ("e".equals(s)) {
+            s = "";
+        }
 
-        // Loop through the input string
-        for (char symbol : input.toCharArray()) {
-            // Create a new set to store next states
-            Set<NFAState> nextStates = new LinkedHashSet<>();
+        // Start with the ε-closure of the initial state.
+        Set<NFAState> currentStates = eClosure(startState);
 
-            // For each current state, find transitions for the symbol
-            for (NFAState state : visited) {
-                Set<NFAState> stateTransitions = getToState(state, symbol);
-                nextStates.addAll(stateTransitions);
+        // Process each character in the input string.
+        for (char c : s.toCharArray()) {
+            Set<NFAState> nextStates = new HashSet<>();
+
+            // Try moving with the current character and accumulate new states.
+            for (NFAState state : currentStates) {
+                Set<NFAState> moveStates = getToState(state, c);
+                nextStates.addAll(moveStates);
             }
 
-            if (nextStates.isEmpty()) {
-                // If there are no transitions, the NFA rejects the input string
+            // Important: After moving, apply the ε-closure again to each reached state.
+            Set<NFAState> eCloseNextStates = new HashSet<>();
+            for (NFAState nextState : nextStates) {
+                eCloseNextStates.addAll(eClosure(nextState));
+            }
+
+            currentStates = eCloseNextStates; // Update the current states.
+
+            // If we can't move anywhere (i.e., no next states available), we should stop.
+            if (currentStates.isEmpty()) {
                 return false;
             }
+        }
 
-            // Update the current state with the set of next states
-            for (NFAState state : nextStates) {
-
-                current = state;
+        // If any of the current states are accepting, the string is accepted.
+        for (NFAState state : currentStates) {
+            if (finalStates.contains(state)) {
+                return true;
             }
-            // current = nextStates.iterator().next();
-
-            visited.addAll(nextStates);
         }
 
-        // After processing the entire input string, check for acceptance
-        NFAState finalState = visited.get(visited.size() - 1);
-
-        if (isFinal(finalState.getName())) {
-            return true; // The NFA accepts the input string
-        }
-
-        return false; // The NFA rejects the input string
+        // No accepting states were reached, so the string is not accepted.
+        return false;
     }
 
     /**
