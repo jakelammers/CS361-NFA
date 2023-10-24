@@ -9,8 +9,19 @@ import org.junit.Test;
 import fa.nfa.NFA;
 import fa.nfa.NFAState;
 
+/**
+ * This class contains unit tests for the NFA class.
+ * These tests check various aspects of the NFA's functionality,
+ * including its ability to correctly process states, transitions, 
+ * and its core algorithms like e-closure calculations, acceptance checking, etc.
+ */
 public class NFATest {
-	
+
+	/**
+	 * Builds a sample NFA for testing.
+	 * This NFA includes various states and transitions, some of which are designed to test edge cases.
+	 * @return A sample NFA.
+	 */
 	private NFA nfa1() {
 		NFA nfa = new NFA();
 		
@@ -42,7 +53,10 @@ public class NFATest {
 		
 	}
 
-	@Test
+	/**
+         * Test method to check the correct instantiation of NFA1.
+         * It checks if the NFA object is created without any issues.
+         */
 	public void test1_1() {
 		NFA nfa = nfa1();
 		System.out.println("nfa1 instantiation done");
@@ -99,7 +113,12 @@ public class NFATest {
 		assertEquals(nfa.maxCopies("2"), 1);
 		System.out.println("nfa1 maxCopies done");
 	}
-	
+
+	/**
+        * Builds another sample NFA for testing.
+        * Similar to nfa1, but designed to check different edge cases and functionality aspects.
+        * @return Another sample NFA.
+        */
 	private NFA nfa2() {
 		NFA nfa = new NFA();
 		
@@ -137,7 +156,10 @@ public class NFATest {
 		
 	}
 	
-	@Test
+	/**
+         * Test method to check the correct instantiation of NFA2.
+         * It checks if the NFA object is created without any issues.
+         */
 	public void test2_1() {
 		NFA nfa = nfa2();
 		System.out.println("nfa2 instantiation done");
@@ -198,7 +220,11 @@ public class NFATest {
 		
 		System.out.println("nfa2 maxCopies done");
 	}
-	
+
+	/**
+         * Builds yet another sample NFA for testing, with different configurations.
+         * @return A uniquely configured sample NFA.
+         */
 	private NFA nfa3() {
 		NFA nfa = new NFA();
 		
@@ -237,7 +263,10 @@ public class NFATest {
 		
 	}
 
-	@Test
+	/**
+         * Test method to check the correct instantiation of NFA3.
+         * It checks if the NFA object is created without any issues.
+         */
 	public void test3_1() {
 		NFA nfa = nfa3();
 		System.out.println("nfa3 instantiation done");
