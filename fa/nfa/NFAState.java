@@ -1,52 +1,41 @@
 package fa.nfa;
 
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 import fa.State;
 
 public class NFAState extends State {
-    private HashMap<Character, NFAState> transitionList;
 
-    /**
-     * All concrete constructors must
-     * invoke this one as super(name).
-     * This way name instance variable is
-     * correctly set.
-     */
+    // Changed to store a Set of NFAStates for each character
+    private HashMap<Character, Set<NFAState>> transitionList;
+
     public NFAState(String name) {
         super(name);
-        transitionList = new HashMap<Character, NFAState>();
+        this.transitionList = new HashMap<>();
     }
 
-    /**
-     * getter for the string label
-     * 
-     * @return returns the state label.
-     */
-    public String getName() {
-        return super.getName();
+    // Add a transition from this state to another state
+    public void addTransition(char symb, NFAState state) {
+        // Get the current set of states for this symbol
+        Set<NFAState> stateSet = transitionList.get(symb);
+
+        if (stateSet == null) {
+            // If no current set, create one
+            stateSet = new HashSet<>();
+            transitionList.put(symb, stateSet);
+        }
+
+        // Add the new state to the set of states for this symbol
+        stateSet.add(state);
     }
 
-    /**
-     * Adds a transition to the DFAState's transition list.
-     * 
-     * @param symb  - Character to transition on
-     * @param state - State to transition to
-     */
-    public void addToState(char symb, NFAState state) {
-        transitionList.put(symb, state);
-    }
-
-    /**
-     * Returns the toState in the HashMap associated with the imput transition
-     * character.
-     * 
-     * @param symb - Transition character
-     * @return - The state that is paired to symb in the HashMap
-     */
-    public NFAState getToState(char symb) {
-        NFAState rval = transitionList.get(symb);
-        return rval;
+    // Get the set of states that this state transitions to on the given symbol
+    public Set<NFAState> getToStates(char symb) {
+        // This method now returns a Set<NFAState> because there can be multiple
+        // destination states
+        return transitionList.getOrDefault(symb, new HashSet<>()); // return an empty set if no transitions exist
     }
 
     /**
@@ -54,7 +43,7 @@ public class NFAState extends State {
      * 
      * @return - HashMap<Character, DFAState> transitionList
      */
-    public HashMap<Character, NFAState> getTransitionList() {
+    public HashMap<Character, Set<NFAState>> getTransitionList() {
         return this.transitionList;
     }
 

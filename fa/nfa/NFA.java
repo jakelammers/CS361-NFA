@@ -122,27 +122,21 @@ public class NFA implements NFAInterface {
         Set<NFAState> currentStates = eClosure(startState);
 
         // Process each character in the input string.
-        for (char c : s.toCharArray()) {
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+
             Set<NFAState> nextStates = new HashSet<>();
+            System.out.println(nextStates);
 
             // Try moving with the current character and accumulate new states.
             for (NFAState state : currentStates) {
                 Set<NFAState> moveStates = getToState(state, c);
-                nextStates.addAll(moveStates);
+                for (NFAState tostate : moveStates) {
+                    nextStates.addAll(eClosure(tostate));
+                }
             }
 
-            // Important: After moving, apply the ε-closure again to each reached state.
-            Set<NFAState> eCloseNextStates = new HashSet<>();
-            for (NFAState nextState : nextStates) {
-                eCloseNextStates.addAll(eClosure(nextState));
-            }
-
-            currentStates = eCloseNextStates; // Update the current states.
-
-            // If we can't move anywhere (i.e., no next states available), we should stop.
-            if (currentStates.isEmpty()) {
-                return false;
-            }
+            currentStates = nextStates;
         }
 
         // If any of the current states are accepting, the string is accepted.
@@ -213,11 +207,11 @@ public class NFA implements NFAInterface {
      * @return a set of sink states
      */
     public Set<NFAState> getToState(NFAState from, char onSymb) {
-        HashMap<Character, NFAState> temp = from.getTransitionList();
+        HashMap<Character, Set<NFAState>> temp = from.getTransitionList();
         Set<NFAState> rSet = new LinkedHashSet<>();
         for (char symb : temp.keySet()) {
             if (symb == onSymb) {
-                rSet.add(temp.get(onSymb));
+                rSet.addAll(temp.get(onSymb));
             }
         }
         return rSet;
@@ -245,7 +239,7 @@ public class NFA implements NFAInterface {
             eClosureSet.add(currentState);
 
             // Get the epsilon transitions of the current state
-            HashMap<Character, NFAState> tl = currentState.getTransitionList();
+            HashMap<Character, Set<NFAState>> tl = currentState.getTransitionList();
             for (char c : tl.keySet()) {
                 if (c == 'e') {
                     // Ad the state to the vector itself; don't do anything else.
@@ -338,7 +332,8 @@ public class NFA implements NFAInterface {
         for (NFAState state : states) {
             for (String toStateName : toStates) {
                 if (state.getName().equals(fromState)) {
-                    state.addToState(onSymb, (NFAState) getState(toStateName));
+
+                    state.addTransition(onSymb, (NFAState) getState(toStateName));
                     return true;
                 }
             }
@@ -353,7 +348,7 @@ public class NFA implements NFAInterface {
      */
     public boolean isDFA() {
         for (NFAState state : states) {
-            HashMap<Character, NFAState> temp = state.getTransitionList();
+            HashMap<Character, Set<NFAState>> temp = state.getTransitionList();
             for (char symb : temp.keySet()) {
                 int flag = 0;
                 if (temp.containsKey(symb)) {
@@ -418,7 +413,8 @@ public class NFA implements NFAInterface {
             builder.append("\t" + c.getName());
             for (Character d : alphabet) {
                 // find transitions for all aphabet here and loop
-                builder.append("\t" + c.getToState(d));
+                // TODO
+                // builder.append("\t" + c.getToState(d));
             }
             builder.append("\n");
         }
