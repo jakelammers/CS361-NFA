@@ -10,16 +10,6 @@ This project involves building and managing nondeterministic finite automata (NF
 ## Reflection
 During the NFA project, we built essential classes like 'NFA' and 'NFAState' to simulate a Non-deterministic Finite Automaton. We focused on accurately implementing complex epsilon transitions, particularly within the 'eClosure' method. Through teamwork, we overcame challenges in creating methods like 'addTransition' and 'isDFA', ensuring our automaton correctly recognized various language patterns. This experience improved our problem-solving skills and emphasized the importance of thorough testing in software development.
 
-### Contents
-```bash
-|-- fa
-| |-- FAInterface.java
-| |-- State.java
-| |-- nfa
-| |-- NFAInterface.java
-|-- test/nfa
-|-- NFATest.java
-```
 ### Compiling and Using
 Navigate to the top of the directory that holds the project:
 
